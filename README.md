@@ -23,8 +23,11 @@ A new .nx file containing an updated edgelist will be created. using the -o flag
 
 ## Parameters
 `-o` output file name
+
 `-f` pedigree file path
+
 `-c` changes the probability of a non paternity event per individual
+
 `-p` file path for .txt file containing attributes of individuals
 
 ## Example
