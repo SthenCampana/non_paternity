@@ -4,7 +4,7 @@ import argparse
 import random
 import pandas as pd
 
-#python non_pat_atty.py -f testfam.nx -p test_fam_profile.txt -c .25
+#python non_pat_atty.py -f test_fam.nx -p test_fam_profile.txt -c .25
 def load_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-o', '--output_prefix', type=str, default = 'NewFile')
