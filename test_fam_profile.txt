@@ -1,15 +1,16 @@
-profileid	gender	is_alive	current_residence_location_city	birth_year	birth_month	birth_day
-1	male	0	*	1900	*	*
-2	female	0	*	1905	*	*
-3	male	0	*	1920	*	*
-4	female	0	*	1935	*	*
-5	*	0	*	1950	*	*
-6	female	1	*	1955	*	*
-7	male	1	*	1945	*	*
-8	1	1	*	1990	*	*
-9	female	0	*	1948	*	*
-10	female	1	*	1975	*	*
-11	female	1	*	2000	*	*
-12	male	1	*	1990	*	*
-13	male	1	*	1935	*	*
-14	female	1	*	1990	*	*
+profileid	gender	birth_year
+1	male	1900
+2	female	1905
+3	male	1920
+4	female	1935
+5	*	1950
+6	female	1955
+7	male	1945
+8	1	1990
+9	female	1948
+10	female	1975
+11	female	2000
+12	male	1990
+13	male	1935
+14	female	1990
+15	male	1990
