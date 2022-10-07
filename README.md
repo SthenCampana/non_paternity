@@ -1,7 +1,7 @@
 # Non_paternity
 
 ## General
-`run_non_paternity` simulates non_paternity events on to individuals in a networkx directed graph. This program is a python script that uses a networkx pacage to traverse node networks.  
+`run_non_paternity` simulates non_paternity events on to individuals in a networkx directed graph. [Networkx](https://networkx.org/documentation/stable/tutorial.html#directed-graphs) is a Python package for creating, manipulating and traversing complex node networks.
 
 ## Inputs 
 .nx files - containing the edge graph of parent child relations respectivly
@@ -19,7 +19,12 @@ profileid   gender  birth_year
 ```
 
 ## Output
-A new .nx file containing an updated edgelist will be created. using the -o flag will rename the file output. 
+A new .nx file containing an updated edgelist will be created. using the -o flag will determine the file output name. If no name is given, the file will be called "New File" 
+```
+2 3 {}
+1 7 {}
+1 6 {}
+```
 
 ## Parameters
 `-o` output file name
@@ -34,3 +39,6 @@ A new .nx file containing an updated edgelist will be created. using the -o flag
 ```
 python non_pat_atty.py -f testfam.nx -p test_fam_profile.txt -c .25 -o new_test_fam
 ```
+
+## References
+Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, “Exploring network structure, dynamics, and function using NetworkX”, in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11–15, Aug 200
