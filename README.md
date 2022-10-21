@@ -37,7 +37,7 @@ A new .nx file containing an updated edgelist will be created. using the -o flag
 
 ## Example
 ```
-python non_pat_atty.py -f testfam.nx -p test_fam_profile.txt -c .25 -o new_test_fam
+python run_non_paternity.py -f testfam.nx -p test_fam_profile.txt -c .25 -o new_test_fam
 ```
 
 ## References
