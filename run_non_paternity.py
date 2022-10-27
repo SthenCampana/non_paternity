@@ -111,8 +111,8 @@ if __name__== '__main__':
     
     u_graph = nx.read_edgelist(F'{user_args.pedigree_filepath}', create_using = nx.DiGraph())
     profiles = pd.read_csv(f'{user_args.profile_filepath}', sep='\t')
-    sex_dict = dict(zip(profiles['profileid'].astype(str).to_numpy(), profiles['gender'].to_numpy()))
-    age_dict = dict(zip(profiles['profileid'].astype(str).to_numpy(), profiles['birth_year'].to_numpy()))
+    sex_dict = dict(zip(profiles['ID'].astype(str).to_numpy(), profiles['Sex'].to_numpy()))
+    age_dict = dict(zip(profiles['ID'].astype(str).to_numpy(), profiles['Birth_Year'].to_numpy()))
     nx.set_node_attributes(u_graph, values=sex_dict, name="sex")
     nx.set_node_attributes(u_graph, values=age_dict, name="birth_year")
 
