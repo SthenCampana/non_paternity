@@ -3,10 +3,10 @@ ID	Sex	Birth_Year
 2	female	1905
 3	male	1920
 4	female	1935
-5	*	1950
+5	male	1950
 6	female	1955
 7	male	1945
-8	1	1990
+8	male	1990
 9	female	1948
 10	female	1975
 11	female	2000
