@@ -1,4 +1,4 @@
-profileid	gender	birth_year
+ID	Sex	Birth_Year
 1	male	1900
 2	female	1905
 3	male	1920
