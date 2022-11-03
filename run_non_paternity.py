@@ -4,7 +4,9 @@ import argparse
 import random
 import pandas as pd
 
-#python non_pat_atty.py -f test_fam.nx -p test_fam_profile.txt -c .25
+#Example: python non_pat_atty.py -f test_fam.nx -p test_fam_profile.txt -c .25
+
+#Created flags for user input
 def load_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-o', '--output_prefix', type=str, default = 'NewFile')
@@ -13,6 +15,7 @@ def load_args():
     parser.add_argument('-p', '--profile_filepath', type = str)
     return parser.parse_args()
 
+#Finds nodes that are male and within a 20-50 year age range of an individuals conception and puts them in a list. 
 def pot_parents(graph, u_indiv):
   sample_parents= []
   sex = nx.get_node_attributes(graph, name = 'sex')
@@ -26,20 +29,24 @@ def pot_parents(graph, u_indiv):
         sample_parents.append(i)
   return(sample_parents)
 
-def non_paternity(graph, prob, output_name, profile_filepath):
+#Iterates through each individual. each iteration has a chance (-c, default 1%) of experiencing a non_paternity. 
+#If a non-paternity happens, a new father is chosen from a pool of potential parents
+def non_paternity(graph, prob, output_name):
   '''
-  non_paternity takesa .nx file to silulate the probility of non-paternity events 
+  non_paternity takes a .nx file to simulate the probility of non-paternity events. 
+  probability can be specified 
+  output file name can be specified
   ''' 
   count = 0 # count for non-paternity events
-  probability = prob * 100
+  probability = prob * 100 # to display the probility
   rem_relations = [] # list of old parent child relations to remove
   add_relations = [] # list of new parent child relations to add
 
-  new_pat = [f'{max([int(i) for i in graph.nodes]) + 1}']
+  new_pat = [f'{max([int(i) for i in graph.nodes]) + 1}'] # creates a random individual outside of the pedigree
   
 
   for indiv in graph.nodes: #For loop around each node(individual) in the graph pedigree
-    cur_parents = list(graph.predecessors(indiv)) #initiaklizes current parents of individual
+    cur_parents = list(graph.predecessors(indiv)) #initializes current parents of individual
     
     # if statement checks if profile was submitted 
     #if profile_filepath != None: #checks for profile user input
@@ -116,4 +123,4 @@ if __name__== '__main__':
     nx.set_node_attributes(u_graph, values=sex_dict, name="sex")
     nx.set_node_attributes(u_graph, values=age_dict, name="birth_year")
 
-    non_paternity(u_graph, u_prob, u_output, profiles)
+    non_paternity(u_graph, u_prob, u_output)
