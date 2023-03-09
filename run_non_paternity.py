@@ -27,7 +27,10 @@ def pot_parents(graph, u_indiv):
         sample_parents.append(i)
       elif 20 <= (int(birth_year[u_indiv]) - int(birth_year[i])) <= 50:
         sample_parents.append(i)
+  if len(sample_parents) != 0:
+    sample_parents = [np.random.choice(sample_parents)]
   return(sample_parents)
+
 
 #Iterates through each individual. each iteration has a chance (-c, default 1%) of experiencing a non_paternity. 
 #If a non-paternity happens, a new father is chosen from a pool of potential parents
@@ -41,71 +44,87 @@ def non_paternity(graph, prob, output_name):
   probability = prob * 100 # to display the probility
   rem_relations = [] # list of old parent child relations to remove
   add_relations = [] # list of new parent child relations to add
-
+  new_pat_bydict = {}
+  new_pat_sexdict = {}
   new_pat = [f'{max([int(i) for i in graph.nodes]) + 1}'] # creates a random individual outside of the pedigree
   
 
   for indiv in graph.nodes: #For loop around each node(individual) in the graph pedigree
+    
     cur_parents = list(graph.predecessors(indiv)) #initializes current parents of individual
     
     # if statement checks if profile was submitted 
     #if profile_filepath != None: #checks for profile user input
     #  potential_parents = list(pot_parents(graph, profile_filepath)) + new_pat
-    #else:
+    #else:                      [1,3]             + [16]  = [1,3,16] 
     potential_parents = pot_parents(graph, indiv) + new_pat #lists all nodes
-    
-
-    for i in cur_parents:
-      if indiv in potential_parents:
-        potential_parents.remove(indiv)
-      if i in potential_parents:
-        potential_parents.remove(i) #removes parents from potential parents list
-        #print(i, 'was removed from',indiv, "'s potential parents")
-    print(indiv,"potential parents:",potential_parents)
-    #  First we will check if the individual is a founder (no parents found in nx.predecessor)
-    if len(list(graph.predecessors(indiv))) == 0:
-      continue
-    elif len(list(graph.predecessors(indiv))) == 1:
-      rep_pat = np.random.choice(potential_parents)
-      paternal_event = np.random.choice([0, 1], size=1, p=[1-prob, prob]) # 0:true paternity 1:non paternity
-      parent_1 = list(graph.predecessors(indiv))[0]
-      if nx.get_node_attributes(graph, name='sex')[parent_1] == 'male':
+    paternal_event = np.random.choice([0, 1], size=1, p=[1-prob, prob]) # 0:true paternity 1:non paternity
+    if paternal_event == 1:
+      for i in cur_parents:
+        if indiv in potential_parents:
+          potential_parents.remove(indiv)
+        if i in potential_parents:
+          potential_parents.remove(i) #removes parents from potential parents list
+          #print(i, 'was removed from',indiv, "'s potential parents")
+      print(indiv,"potential parents:",potential_parents)
+      #  First we will check if the individual is a founder (no parents found in nx.predecessor)
+      if len(list(graph.predecessors(indiv))) == 0:
+        continue
+      elif len(list(graph.predecessors(indiv))) == 1:
         rep_pat = np.random.choice(potential_parents)
-        print(f'{parent_1} is not the father of {indiv}. Their father is {rep_pat}')
-        rem_relations.append((male_parent, indiv))
-        add_relations.append((rep_pat, indiv))
-        if rep_pat == new_pat[0]:
-          new_pat = [str(int(new_pat[0]) + 1)] # increments the newPat and keeps it as a string         
-        count += 1
-        potential_parents.remove(f'{rep_pat}')
-    else:
-      paternal_event = np.random.choice([0, 1], size=1, p=[1-prob, prob]) # 0:true paternity 1:non paternity
-      parent_1 = list(graph.predecessors(indiv))[0]
-      parent_2 = list(graph.predecessors(indiv))[1]
-      if nx.get_node_attributes(graph, name='sex')[parent_1] == 'male':
-        male_parent = parent_1
-        female_parent = parent_2
+        parent_1 = list(graph.predecessors(indiv))[0]
+        if nx.get_node_attributes(graph, name='sex')[parent_1] == 'male':
+          rep_pat = np.random.choice(potential_parents)
+          print(f'{parent_1} is not the father of {indiv}. Their father is {rep_pat}')
+          rem_relations.append((male_parent, indiv))
+          add_relations.append((rep_pat, indiv))
+          if rep_pat == new_pat[0]:
+            new_pat_bydict[new_pat[0]] = graph.nodes[female_parent]["birth_year"]
+            new_pat_sexdict[new_pat[0]] = 'male'
+            print('i worked')
+            new_pat = [str(int(new_pat[0]) + 1)] # increments the newPat and keeps it as a string         
+          count += 1
+          potential_parents.remove(f'{rep_pat}')
       else:
-        male_parent = parent_2
-        female_parent = parent_1
-      if(paternal_event == 1): # If false then we test one parent connection, 
-        rep_pat = np.random.choice(potential_parents)
-        print(f'{male_parent} is not the father of {indiv}. Their parents are {rep_pat} and {female_parent}')
-        rem_relations.append((male_parent, indiv))
-        add_relations.append((rep_pat, indiv))
-        if rep_pat == new_pat[0]:
-          new_pat = [str(int(new_pat[0]) + 1)] # increments the newPat and keeps it as a string         
-        count += 1
-        #print(rep_pat)
-        potential_parents.remove(f'{rep_pat}')
-      else: # True paternity events means we fill the child and parent connection.
-        pass
-      
+        parent_1 = list(graph.predecessors(indiv))[0]
+        parent_2 = list(graph.predecessors(indiv))[1]
+        if nx.get_node_attributes(graph, name='sex')[parent_1] == 'male':
+          male_parent = parent_1
+          female_parent = parent_2
+        else:
+          male_parent = parent_2
+          female_parent = parent_1
+        if(paternal_event == 1): # If false then we test one parent connection, 
+          rep_pat = np.random.choice(potential_parents)
+          print(f'{male_parent} is not the father of {indiv}. Their parents are {rep_pat} and {female_parent}')
+          rem_relations.append((male_parent, indiv))
+          add_relations.append((rep_pat, indiv))
+          if rep_pat == new_pat[0]:
+            new_pat_bydict[new_pat[0]] = graph.nodes[female_parent]["birth_year"]
+            new_pat_sexdict[new_pat[0]] = 'male'
+            print('i worked')
+            new_pat = [str(int(new_pat[0]) + 1)] # increments the newPat and keeps it as a string         
+          count += 1
+          #print(rep_pat)
+          potential_parents.remove(f'{rep_pat}')
+        else: # True paternity events means we fill the child and parent connection.
+          pass
+      print(rep_pat, type(rep_pat), new_pat, type(new_pat))
+      if rep_pat == new_pat:
+        new_pat_bydict[new_pat] = graph.nodes[female_parent]["birth_year"]
+        new_pat_sexdict[new_pat] = 'male'
+        #example {14 : 1990, 15 : 2000}
+        print('i worked')
+    else:
+      pass 
   print(f'number of non-paternity events: {count}')
   print(f'Probability of non-paternity event: {probability}%')
   graph.remove_edges_from(rem_relations)
   graph.add_edges_from(add_relations)
+  nx.set_node_attributes(graph, new_pat_sexdict, name = "sex")
+  nx.set_node_attributes(graph, new_pat_bydict, name = "birth_year")
   nx.write_edgelist(graph, f'{output_name}.nx')
+  print(graph.nodes(data = True))
 
   
   return
