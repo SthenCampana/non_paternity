@@ -81,7 +81,6 @@ def non_paternity(graph, prob, output_name):
           if rep_pat == new_pat[0]:
             new_pat_bydict[new_pat[0]] = graph.nodes[female_parent]["birth_year"]
             new_pat_sexdict[new_pat[0]] = 'male'
-            print('i worked')
             new_pat = [str(int(new_pat[0]) + 1)] # increments the newPat and keeps it as a string         
           count += 1
           potential_parents.remove(f'{rep_pat}')
@@ -114,7 +113,6 @@ def non_paternity(graph, prob, output_name):
         new_pat_bydict[new_pat] = graph.nodes[female_parent]["birth_year"]
         new_pat_sexdict[new_pat] = 'male'
         #example {14 : 1990, 15 : 2000}
-        print('i worked')
     else:
       pass 
   print(f'number of non-paternity events: {count}')
@@ -124,7 +122,6 @@ def non_paternity(graph, prob, output_name):
   nx.set_node_attributes(graph, new_pat_sexdict, name = "sex")
   nx.set_node_attributes(graph, new_pat_bydict, name = "birth_year")
   nx.write_edgelist(graph, f'{output_name}.nx')
-  print(graph.nodes(data = True))
 
   
   return
