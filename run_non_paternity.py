@@ -4,7 +4,7 @@ import argparse
 import random
 import pandas as pd
 
-#Example: python non_pat_atty.py -f test_fam.nx -p test_fam_profile.txt -c .25
+#Example: python run_non_paternity.py -f test_fam.nx -p test_fam_profile.txt -c .25
 
 #Created flags for user input
 def load_args():
